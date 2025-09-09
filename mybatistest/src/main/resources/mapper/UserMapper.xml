@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须是UserMapper接口的完整类名 -->
+<mapper namespace="com.itheima.mapper.UserMapper">
+
+    <!-- 1. 增加用户：useGeneratedKeys获取自增ID，keyProperty对应User类的主键字段（如id） -->
+    <insert id="insertUser" parameterType="com.itheima.pojo.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user (id, username, password,email)
+        VALUES (#{id}, #{username}, #{password}, #{email})
+    </insert>
+
+    <!-- 2. 删除用户：根据ID删除，parameterType为ID的数据类型 -->
+    <delete id="deleteUserById" parameterType="java.lang.Integer">
+        DELETE FROM user WHERE id = #{id}
+    </delete>
+
+    <!-- 3. 修改用户：根据主键更新其他字段，parameterType为User实体类 -->
+    <update id="updateUser" parameterType="com.itheima.pojo.User">
+        UPDATE user
+        SET username = #{username}, password = #{password}, email = #{email}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 4. 查询单个用户：根据ID查询，resultType为返回的实体类全路径 -->
+    <select id="selectUserById" parameterType="java.lang.Integer" resultType="com.itheima.pojo.User">
+        SELECT id, username, password , email FROM user WHERE id = #{id}
+    </select>
+
+    <!-- 5. 查询全部用户：返回List集合，resultType为集合中的元素类型（User） -->
+    <select id="selectAllUsers" resultType="com.itheima.pojo.User">
+        SELECT id, username, password , email FROM user
+    </select>
+
+</mapper>
