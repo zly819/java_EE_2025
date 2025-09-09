@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-//工具类
+//工具类--二次提交
 public class MyBatisUtil {
     private static final SqlSessionFactory factory;
     static {
