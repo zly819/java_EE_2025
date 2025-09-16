@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hngc.dao.StudentMapper">
+
+    <!-- 多条件动态查询 -->
+    <select id="findByNameOrMajor" resultType="com.hngc.bean.Student">
+        SELECT id, name, major, sno
+        FROM dm_student
+        <where>
+            <choose>
+                <when test="name != null and name != ''">
+                    name LIKE CONCAT('%', #{name}, '%')
+                </when>
+                <when test="major != null and major != ''">
+                    major LIKE CONCAT('%', #{major}, '%')
+                </when>
+                <otherwise>
+                    sno IS NOT NULL
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <!-- 单条件查询 -->
+    <select id="findByIdLT5" resultType="com.hngc.bean.Student">
+        SELECT id, name, major, sno
+        FROM dm_student
+        WHERE id &lt; 5
+    </select>
+</mapper>
