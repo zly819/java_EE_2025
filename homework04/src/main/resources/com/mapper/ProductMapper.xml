@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.ProductMapper">
+
+    <!-- 定义结果集映射：商品与类别关联 -->
+    <resultMap id="ProductWithCategoryMap" type="com.entity.Product">
+        <id property="id" column="p_id"/>
+        <result property="goodsname" column="goodsname"/>
+        <result property="price" column="price"/>
+        <result property="typeid" column="typeid"/>
+        <!-- 关联类别对象 -->
+        <association property="category" javaType="com.entity.Category">
+            <id property="id" column="c_id"/>
+            <result property="typename" column="typename"/>
+        </association>
+    </resultMap>
+
+    <!-- 1. 查询商品类别为"白色家电"的所有商品信息 -->
+    <select id="getProductByCategoryName" resultMap="ProductWithCategoryMap">
+        SELECT p.id AS p_id, p.goodsname, p.price, p.typeid, c.id AS c_id, c.typename
+        FROM product p
+                 JOIN category c ON p.typeid = c.id
+        WHERE c.typename = #{typename}
+    </select>
+
+    <!-- 2. 实现商品与商品类别的关联查询（返回包含类别名称的完整商品信息） -->
+    <select id="getProductWithCategory" resultMap="ProductWithCategoryMap">
+        SELECT p.id AS p_id, p.goodsname, p.price, p.typeid, c.id AS c_id, c.typename
+        FROM product p
+                 LEFT JOIN category c ON p.typeid = c.id
+    </select>
+
+</mapper>
