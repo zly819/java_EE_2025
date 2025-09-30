@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 命名空间必须与Mapper接口全路径一致 -->
+<mapper namespace="com.mapper.ProductMapper">
+
+    <!-- 结果集映射：关联Product和Category -->
+    <resultMap id="ProductWithCategoryMap" type="com.entity.Product">
+        <!-- 商品表字段映射 -->
+        <id property="id" column="p_id"/> <!-- 主键，column为SQL查询别名 -->
+        <result property="goodsname" column="goodsname"/>
+        <result property="price" column="price"/>
+        <result property="typeid" column="typeid"/>
+
+        <!-- 关联类别对象（一对一关联，用association） -->
+        <association property="category" javaType="com.entity.Category">
+            <id property="id" column="c_id"/>
+            <result property="typename" column="typename"/>
+        </association>
+    </resultMap>
+
+    <!-- 1. 根据类别名称查询商品 -->
+    <select id="getProductByCategoryName" resultMap="ProductWithCategoryMap">
+        SELECT
+            p.id AS p_id,  -- 别名避免与类别表id冲突
+            p.goodsname,
+            p.price,
+            p.typeid,
+            c.id AS c_id,
+            c.typename
+        FROM product p
+                 JOIN category c ON p.typeid = c.id  -- 内连接，只查有类别关联的商品
+        WHERE c.typename = #{typename}
+    </select>
+
+    <!-- 2. 查询所有商品（包含类别信息） -->
+    <select id="getProductWithCategory" resultMap="ProductWithCategoryMap">
+        SELECT
+            p.id AS p_id,
+            p.goodsname,
+            p.price,
+            p.typeid,
+            c.id AS c_id,
+            c.typename
+        FROM product p
+                 LEFT JOIN category c ON p.typeid = c.id  -- 左连接，即使无类别也显示商品
+    </select>
+
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 环境配置（连接数据库） -->
+    <environments default="development">
+        <environment id="development">
+            <!-- 事务管理：JDBC（依赖数据库事务） -->
+            <transactionManager type="JDBC"/>
+            <!-- 数据源：POOLED（连接池，推荐） -->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/> <!-- MySQL 8.0+驱动 -->
+                <!-- 数据库URL：替换为你的数据库名（此处为mybatis），时区UTC -->
+                <property name="url" value="jdbc:mysql://localhost:3306/mybatis?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"/>
+                <property name="username" value="root"/>
+                <property name="password" value="123456"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- 映射器配置：扫描Mapper接口和XML文件 -->
+    <mappers>
+        <!-- 方式1：扫描XML文件（需与Mapper接口路径一致） -->
+        <mapper resource="com/mapper/CategoryMapper.xml"/>
+        <mapper resource="com/mapper/ProductMapper.xml"/>
+
+        <!-- 方式2：扫描Mapper接口（注解实现SQL时用，二选一即可） -->
+        <!-- <mapper class="com.mapper.CategoryMapper"/> -->
+        <!-- <mapper class="com.mapper.ProductMapper"/> -->
+    </mappers>
+</configuration>
